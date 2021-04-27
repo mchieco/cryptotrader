@@ -1,0 +1,3 @@
+gemini-python==0.2.0
+coinbasepro==0.3.0
+kucoin-python==1.0.6

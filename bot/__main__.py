@@ -7,9 +7,15 @@ import dca_portfolio
 
 
 def main():
-    # cbpro_trader.run_trades(dca_portfolio.cbpro_portfolio)
-    kucoin_trader.run_trades(dca_portfolio.kucoin_portfolio)
-    # gemini_trader.run_trades(dca_portfolio.gemini_portfolio)
+    if dca_portfolio.cbpro_portfolio:
+        print("yup")
+        pass
+        #cbpro_trader.run_trades(dca_portfolio.cbpro_portfolio)
+    if dca_portfolio.kucoin_portfolio:
+        kucoin_trader.run_trades(dca_portfolio.kucoin_portfolio)
+    if dca_portfolio.gemini_portfolio:
+        pass
+        #gemini_trader.run_trades(dca_portfolio.gemini_portfolio)
 
 
 def auto_deposit():

@@ -6,6 +6,17 @@ class Coin:
     ticker: str
     buy_amount: Decimal
 
-gemini_portfolio = [Coin("btcusd", Decimal(40)), Coin("ethusd", Decimal(30)), Coin("linkusd", Decimal(10))]
-cbpro_portfolio = [Coin("ADA-USD", Decimal(10)), Coin("ALGO-USD", Decimal(10))]
-kucoin_portfolio = [Coin("VET-BTC", Decimal(10))]
+gemini_portfolio = [
+    Coin("btcusd", 30), 
+    Coin("ethusd", 30), 
+    Coin("linkusd", 10)
+]
+cbpro_portfolio = [
+    Coin("ALGO-USD", 10),
+    Coin("ATOM-USD", 10)
+]
+kucoin_portfolio = [
+    Coin("VET-BTC", 10)
+]
+
+cbpro_auto_deposit_amount = 25.00

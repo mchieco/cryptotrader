@@ -63,7 +63,9 @@ The program requires you to create a ```config.py``` file in the root directory.
 This will contain all of your api keys, passphrases and secrets for all the platforms.
 
 The config file must follow the same structure as it relies on the names of the coniguration elements to run properly.
-Change the empty strings with your api secrets 
+Change the empty strings with your api secrets
+
+#### **`config.py`**
 ```python
 #for gemini
 gemini_api_key = ""
@@ -94,6 +96,7 @@ You will also need to select yes when it asks you if you want to autodeposit on 
 
 By creating a coin in the portfolio following the structure below, it will place a limit buy at the highest current bid, and then wait until the order is filled to move on to the next order. If the order isn't filled within a minute, then it will cancel the order and create a new order at the current highest bid.
 
+#### **`dca_portfolio.py`**
 ```python
 gemini_portfolio = [
     Coin("btcusd", 30), 
@@ -111,6 +114,7 @@ kucoin_portfolio = [
 So in this example, it will buy $30 in btc, $30 in eth, $10 in ALGO, $10 in ATOM, and $10 in VET.
 If you are not investing on one of the platforms simply remove all the Coin objects from the portfolio
 
+#### **`dca_portfolio.py`**
 ```python
 gemini_portfolio = [ #not using gemini 
 ]

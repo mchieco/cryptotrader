@@ -8,14 +8,11 @@ import dca_portfolio
 
 def main():
     if dca_portfolio.cbpro_portfolio:
-        print("yup")
-        pass
-        #cbpro_trader.run_trades(dca_portfolio.cbpro_portfolio)
+        cbpro_trader.run_trades(dca_portfolio.cbpro_portfolio)
     if dca_portfolio.kucoin_portfolio:
         kucoin_trader.run_trades(dca_portfolio.kucoin_portfolio)
     if dca_portfolio.gemini_portfolio:
-        pass
-        #gemini_trader.run_trades(dca_portfolio.gemini_portfolio)
+        gemini_trader.run_trades(dca_portfolio.gemini_portfolio)
 
 
 def auto_deposit():
@@ -48,7 +45,9 @@ if __name__ == "__main__":
     if user_input == "schedule":
         print("Schedule job start, will DCA based on the specified time")
         schedule.every().sunday.at("13:00").do(main)
-        schedule.every(4).weeks.do(auto_deposit)
+        deposit = input("Would you like to auto deposit every week at the same time for coinbase pro, yes or no?: ")
+        if deposit == "yes":
+            schedule.every().sunday.at("13:00").do(auto_deposit)
         while True:
             schedule.run_pending()
             time.sleep(1)

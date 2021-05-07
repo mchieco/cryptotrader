@@ -68,9 +68,11 @@ Change the empty strings with your api secrets
 #for gemini
 gemini_api_key = ""
 gemini_api_secret = ""
+#for coinbase pro
 coinbase_pro_api_key = ""
 coinbase_pro_api_passphrase = ""
 coinbase_pro_api_secret = ""
+#for kucoin
 kucoin_api_key = ""
 kucoin_api_passphrase = ""
 kucoin_api_secret = ""
@@ -81,6 +83,16 @@ kucoin_api_secret = ""
 The other piece of information that is required is the crypto you want to buy and the amount in USD you want to buy of it.
 This is done in the ```dca_portfolio.py``` file in the root directory.
 You simply add the ticker value and the amount of money you want to invest per run per coin.
+There is also the ability to auto deposit into coinbase pro at the same time if you so choose, this can be done via adding:
+
+```python
+cbpro_auto_deposit_amount = 25.00
+```
+
+You will also need to select yes when it asks you if you want to autodeposit on a scheduled job.
+
+
+By creating a coin in the portfolio following the structure below, it will place a limit buy at the highest current bid, and then wait until the order is filled to move on to the next order. If the order isn't filled within a minute, then it will cancel the order and create a new order at the current highest bid.
 
 ```python
 gemini_portfolio = [
@@ -98,6 +110,7 @@ kucoin_portfolio = [
 
 So in this example, it will buy $30 in btc, $30 in eth, $10 in ALGO, $10 in ATOM, and $10 in VET.
 If you are not investing on one of the platforms simply remove all the Coin objects from the portfolio
+
 ```python
 gemini_portfolio = [ #not using gemini 
 ]

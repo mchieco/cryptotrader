@@ -42,9 +42,9 @@ def run_trades(coin_list: list[Coin]):
                 "price"
             ]
             price_in_usd = Decimal(crypto_to_crypto_bid_price) * Decimal(usd_price)
-            amount_to_buy = f"{Decimal(10) / price_in_usd:.5f}"
+            amount_to_buy = Decimal(10) / price_in_usd
             order_id = private_client.create_limit_order(
-                ticker, "buy", amount_to_buy, crypto_to_crypto_bid_price
+                ticker, "buy", str(f"{amount_to_buy:.5f}"), crypto_to_crypto_bid_price
             )["orderId"]
             order = private_client.get_order_details(order_id)
             is_live = order["isActive"]
@@ -64,9 +64,9 @@ def run_trades(coin_list: list[Coin]):
                     price_in_usd = Decimal(crypto_to_crypto_bid_price) * Decimal(
                         usd_price
                     )
-                    amount_to_buy = f"{Decimal(10) / price_in_usd:.5f}"
+                    amount_to_buy = Decimal(10) / price_in_usd
                     order_id = private_client.create_limit_order(
-                        ticker, "buy", amount_to_buy, crypto_to_crypto_bid_price
+                        ticker, "buy", str(f"{amount_to_buy:.5f}"), crypto_to_crypto_bid_price
                     )["orderId"]
                     order = private_client.get_order_details(order_id)
                     new_buy_counter = 6

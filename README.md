@@ -43,7 +43,7 @@ Don't forget, you will need to be in the venv everytime you want to run the prog
 ## Usage
 
 There are multiple ways to use this bot.
-The 2 main features are the DCA scheduled buy, which is set by default to Sunday at 1pm; and the one time run which will buy the specified porfolio at runtime.
+The 2 main features are the DCA scheduled buy and the one time run which will buy the specified porfolio at runtime.
 
 To run the scheduled job, it requires the server/computer its running on to always be on and running the script.
 Therefore, if you don't have a server or raspberry pi, the single time run will be the best option.
@@ -53,6 +53,10 @@ In order to run the prgram run the following:
 python -m bot
 ```
 It will ask you what type of job you want to run, the keywords are ```schedule```, ```run```, or ```sell```  
+
+If you choose ```schedule``` it will ask you if you want ```monthly```, ```biweekly```, or ```weekly```; Select your prefered option.
+
+The default invest time is sunday at 1pm local. This can be changed, and is explained [here](#changing-the-dca-time-or-day-of-the-week)
 
 You can also use the program to do singular sells through the API. This can save on transaction fees if they are lower on the API than on the platform, ex. Gemini.
 The sell command will ask you questions about what you want to sell, so follow the promopts and it will fill out a sell limit order based on the inputs.
@@ -126,6 +130,22 @@ kucoin_portfolio = [ #using kucoin
     Coin("VET-BTC", 10)
 ]
 ```
+## Changing the DCA time or day of the week
+The default DCA time for the scheduled job is sunday at 1:00 pm local time. This can be changed to your liking by editing a singular line of code.
+
+#### **`__main__.py`**
+```python
+    schedule.every().sunday.at("13:00").do(scheduled_trade(timeframe, deposit))
+
+```
+
+For example, if you wanted thursday at 3am:
+#### **`__main__.py`**
+```python
+    schedule.every().thursday.at("3:00").do(scheduled_trade(timeframe, deposit))
+```
+
+Once you do this on your local version and save it, it will run with your changed settings!
 
 ## Final Thoughts
 

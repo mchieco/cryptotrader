@@ -1,4 +1,4 @@
 git+git://github.com/mchieco/gemini-python.git@master#egg=gemini-python
-cbpro==1.1.4
+git+git://github.com/mchieco/coinbasepro-python.git@master#egg=coinbasepro-python
 kucoin-python==1.0.6
 schedule==1.1.0

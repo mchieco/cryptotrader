@@ -11,12 +11,16 @@ def run_trades(coin_list: list[Coin]):
         private_client = PrivateClient(config.gemini_api_key, config.gemini_api_secret)
         ticker = coin.ticker
         amount = coin.buy_amount
-        precision_value = _get_precision_value(ticker)
+        precision_value = _get_precision_value(public_client, ticker)
         if ticker[-3:] == ("usd"):
             bid_price = Decimal(public_client.get_ticker(ticker)["bid"])
             amount_to_buy = amount / bid_price
             order = private_client.new_order(
-                ticker, str(f"{amount_to_buy:.{precision_value}f}"), str(bid_price), "buy", []
+                ticker,
+                str(f"{amount_to_buy:.{precision_value}f}"),
+                str(bid_price),
+                "buy",
+                [],
             )
             is_live = order["is_live"]
             new_buy_counter = 6
@@ -28,7 +32,11 @@ def run_trades(coin_list: list[Coin]):
                     print(f"canceled order with id {order['order_id']}")
                     bid_price = Decimal(public_client.get_ticker(ticker)["bid"])
                     order = private_client.new_order(
-                        ticker, str(f"{amount_to_buy:.{precision_value}f}"), str(bid_price), "buy", []
+                        ticker,
+                        str(f"{amount_to_buy:.{precision_value}f}"),
+                        str(bid_price),
+                        "buy",
+                        [],
                     )
                     new_buy_counter = 6
 
@@ -76,13 +84,13 @@ def run_trades(coin_list: list[Coin]):
         )
 
 
-def _get_precision_value(public_client: PublicClient, symbol: str):
-    public_client.symbol_details(symbol)
-    tick_size = symbol["tick_size"]
+def _get_precision_value(public_client: PublicClient, symbol: str) -> int:
+    symbol_details = public_client.symbol_details(symbol)
+    tick_size = symbol_details["tick_size"]
     if tick_size.startswith("1E"):
-        return tick_size.split("-")[1]
-    else:
-        return len(tick_size.split(".")[1])
+        return int(tick_size.split("-")[1])
+    return len(tick_size.split(".")[1])
+
 
 def sell_order(ticker: str, amount: str, price: str):
     public_client = PublicClient()

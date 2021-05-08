@@ -15,11 +15,15 @@ def run_trades(coin_list: list[Coin]):
         )
         ticker = coin.ticker
         amount = coin.buy_amount
+        precision_value = _get_precision_value(public_client, ticker)
         if ticker.split("-")[1] == ("USDT" or "USDC"):
             bid_price = Decimal(public_client.get_ticker(ticker)["bestBid"])
             amount_to_buy = amount / bid_price
             order = private_client.create_limit_order(
-                ticker, "buy", str(f"{amount_to_buy:.5f}"), str(bid_price)
+                ticker,
+                "buy",
+                str(f"{amount_to_buy:.{precision_value}f}"),
+                str(bid_price),
             )
             is_live = order["isActive"]
             new_buy_counter = 6
@@ -31,7 +35,10 @@ def run_trades(coin_list: list[Coin]):
                     print(f"canceled order with id {order['id']}")
                     bid_price = Decimal(public_client.get_ticker(ticker)["bestBid"])
                     order = private_client.create_limit_order(
-                        ticker, "buy", str(f"{amount_to_buy:.5f}"), str(bid_price)
+                        ticker,
+                        "buy",
+                        str(f"{amount_to_buy:.{precision_value}f}"),
+                        str(bid_price),
                     )
                     new_buy_counter = 6
                 time.sleep(10)
@@ -44,7 +51,10 @@ def run_trades(coin_list: list[Coin]):
             price_in_usd = Decimal(crypto_to_crypto_bid_price) * Decimal(usd_price)
             amount_to_buy = Decimal(10) / price_in_usd
             order_id = private_client.create_limit_order(
-                ticker, "buy", str(f"{amount_to_buy:.5f}"), crypto_to_crypto_bid_price
+                ticker,
+                "buy",
+                str(f"{amount_to_buy:.{precision_value}f}"),
+                crypto_to_crypto_bid_price,
             )["orderId"]
             order = private_client.get_order_details(order_id)
             is_live = order["isActive"]
@@ -66,7 +76,10 @@ def run_trades(coin_list: list[Coin]):
                     )
                     amount_to_buy = Decimal(10) / price_in_usd
                     order_id = private_client.create_limit_order(
-                        ticker, "buy", str(f"{amount_to_buy:.5f}"), crypto_to_crypto_bid_price
+                        ticker,
+                        "buy",
+                        str(f"{amount_to_buy:.{precision_value}f}"),
+                        crypto_to_crypto_bid_price,
                     )["orderId"]
                     order = private_client.get_order_details(order_id)
                     new_buy_counter = 6
@@ -74,6 +87,19 @@ def run_trades(coin_list: list[Coin]):
                 new_buy_counter -= 1
 
         print(f'Bought {order["size"]} amount of {ticker} for {order["price"]}')
+
+
+def _get_precision_value(public_client: Market, symbol: str) -> int:
+    tick_size = _get_symbol_details(public_client, symbol)["priceIncrement"]
+    return len(tick_size.split(".")[1])
+
+
+def _get_symbol_details(public_client: Market, symbol: str):
+    symbol_list = public_client.get_symbol_list()
+    for symbol_item in symbol_list:
+        if symbol_item["symbol"] == symbol:
+            return symbol_item
+    raise Exception("could not find symbol in list for currency")
 
 
 def sell_order(ticker: str, amount: str, price: str):

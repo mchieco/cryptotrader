@@ -9,19 +9,21 @@ import dca_portfolio
 
 def scheduled_trade(timeframe: str, deposit: str):
     day_of_month = datetime.now().day
-    if(timeframe == "monthly"):
-        if (day_of_month > 7):
-            return # return if not first specified day of the month
+    if timeframe == "monthly":
+        if day_of_month > 7:
+            return  # return if not first specified day of the month
         auto_deposit(deposit)
         run_portfolio_trade()
-    elif(timeframe == "biweekly"):
-        if (day_of_month > 7 and day_of_month < 15) or day_of_month > 21:
-            return # return if not first / third specifed day of month
+    elif timeframe == "biweekly":
+        # if (day_of_month > 7 and day_of_month < 15) or day_of_month > 21:
+        if (7 < day_of_month < 15) or day_of_month > 21:
+            return  # return if not first / third specifed day of month
         auto_deposit(deposit)
         run_portfolio_trade()
-    elif(timeframe == "weekly"):
+    elif timeframe == "weekly":
         auto_deposit(deposit)
         run_portfolio_trade()
+
 
 def run_portfolio_trade():
     if dca_portfolio.cbpro_portfolio:
@@ -31,8 +33,9 @@ def run_portfolio_trade():
     if dca_portfolio.gemini_portfolio:
         gemini_trader.run_trades(dca_portfolio.gemini_portfolio)
 
-def auto_deposit(deposit: str):
-    if deposit == "yes":
+
+def auto_deposit(deposit_yes_or_no: str):
+    if deposit_yes_or_no == "yes":
         cbpro_trader.auto_deposit(dca_portfolio.cbpro_auto_deposit_amount)
 
 
@@ -61,15 +64,19 @@ if __name__ == "__main__":
     )
     if user_input == "schedule":
         while True:
-            timeframe = input(
+            timeframe_input = input(
                 "Would you like to invest 'weekly', 'biweekly', or 'monthly'?: "
             )
-            if timeframe in ["weekly", "biweekly", "monthly"]:
+            if timeframe_input in ["weekly", "biweekly", "monthly"]:
                 break
 
-        deposit = input(f"Would you like to auto deposit {timeframe} at the same time for coinbase pro, yes or no?: ")
-        schedule.every().sunday.at("13:00").do(scheduled_trade, timeframe=timeframe, deposit=deposit)
-        print(f"Schedule job start, will DCA {timeframe}")
+        deposit_input = input(
+            f"Would you like to auto deposit {timeframe_input} at the same time for coinbase pro, yes or no?: "
+        )
+        schedule.every().sunday.at("13:00").do(
+            scheduled_trade, timeframe=timeframe_input, deposit=deposit_input
+        )
+        print(f"Schedule job start, will DCA {timeframe_input}")
         while True:
             schedule.run_pending()
             time.sleep(1)

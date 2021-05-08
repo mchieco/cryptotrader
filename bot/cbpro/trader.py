@@ -15,12 +15,13 @@ def run_trades(coin_list: list[Coin]):
         )
         ticker = coin.ticker
         amount = coin.buy_amount
+        precision_value = _get_precision_value(public_client, ticker)
         if ticker.split("-")[1] == ("USD" or "USDC"):
             bid_price = Decimal(public_client.get_product_ticker(ticker)["bid"])
             amount_to_buy = amount / bid_price
             order = authenticated_client.place_limit_order(
                 product_id=ticker,
-                size=str(f"{amount_to_buy:.6f}"),
+                size=str(f"{amount_to_buy:.{precision_value}f}"),
                 price=str(bid_price),
                 side="buy",
             )
@@ -35,7 +36,7 @@ def run_trades(coin_list: list[Coin]):
                     bid_price = Decimal(public_client.get_product_ticker(ticker)["bid"])
                     order = authenticated_client.place_limit_order(
                         product_id=ticker,
-                        size=str(f"{amount_to_buy:.6f}"),
+                        size=str(f"{amount_to_buy:.{precision_value}f}"),
                         price=str(bid_price),
                         side="buy",
                     )
@@ -52,7 +53,7 @@ def run_trades(coin_list: list[Coin]):
             amount_to_buy = Decimal(10) / price_in_usd
             order = authenticated_client.place_limit_order(
                 product_id=ticker,
-                size=str(f"{amount_to_buy:.6f}"),
+                size=str(f"{amount_to_buy:.{precision_value}f}"),
                 price=str(crypto_to_crypto_bid_price),
                 side="buy",
             )
@@ -76,7 +77,7 @@ def run_trades(coin_list: list[Coin]):
                     amount_to_buy = Decimal(10) / price_in_usd
                     order = authenticated_client.place_limit_order(
                         product_id=ticker,
-                        size=str(f"{amount_to_buy:.6f}"),
+                        size=str(f"{amount_to_buy:.{precision_value}f}"),
                         price=str(crypto_to_crypto_bid_price),
                         side="buy",
                     )
@@ -85,6 +86,14 @@ def run_trades(coin_list: list[Coin]):
                 new_buy_counter -= 1
 
         print(f'Bought {order["size"]} amount of {ticker} for {order["price"]}')
+
+
+def _get_precision_value(public_client: PublicClient, symbol: str) -> int:
+    symbol_details = public_client.get_single_product(symbol)
+    tick_size = symbol_details["base_increment"]
+    if tick_size.startswith("1"):
+        return 0
+    return len(tick_size.split(".")[1])
 
 
 def sell_order(ticker: str, amount: str, price: str):

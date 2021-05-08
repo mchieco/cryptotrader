@@ -1,4 +1,4 @@
-gemini-python==0.2.0
+git+git://github.com/mchieco/gemini-python.git@master#egg=gemini-python
 cbpro==1.1.4
 kucoin-python==1.0.6
 schedule==1.1.0

@@ -131,18 +131,17 @@ kucoin_portfolio = [ #using kucoin
 ]
 ```
 ## Changing the DCA time or day of the week
-The default DCA time for the scheduled job is sunday at 1:00 pm local time. This can be changed to your liking by editing a singular line of code.
+The default DCA time for the scheduled job is sunday at 1:00 pm local time. This can be changed to your liking by editing a singular line of code in the ```__main__.py``` file in the ```bot``` folder.
 
 #### **`__main__.py`**
 ```python
-    schedule.every().sunday.at("13:00").do(scheduled_trade(timeframe, deposit))
-
+    schedule.every().sunday.at("13:00").do(scheduled_trade, timeframe=timeframe, deposit=deposit)
 ```
 
 For example, if you wanted thursday at 3am:
 #### **`__main__.py`**
 ```python
-    schedule.every().thursday.at("3:00").do(scheduled_trade(timeframe, deposit))
+    schedule.every().thursday.at("3:00").do(scheduled_trade, timeframe=timeframe, deposit=deposit)
 ```
 
 Once you do this on your local version and save it, it will run with your changed settings!

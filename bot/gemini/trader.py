@@ -86,8 +86,8 @@ def run_trades(coin_list: list[Coin]):
 
 def _get_precision_value(public_client: PublicClient, symbol: str) -> int:
     symbol_details = public_client.symbol_details(symbol)
-    tick_size = symbol_details["tick_size"]
-    if tick_size.startswith("1E"):
+    tick_size = str(symbol_details["tick_size"])
+    if tick_size.startswith("1e"):
         return int(tick_size.split("-")[1])
     return len(tick_size.split(".")[1])
 

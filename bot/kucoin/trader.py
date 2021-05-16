@@ -19,26 +19,35 @@ def run_trades(coin_list: list[Coin]):
         if ticker.split("-")[1] == ("USDT" or "USDC"):
             bid_price = Decimal(public_client.get_ticker(ticker)["bestBid"])
             amount_to_buy = amount / bid_price
-            order = private_client.create_limit_order(
+            order_id = private_client.create_limit_order(
                 ticker,
                 "buy",
                 str(f"{amount_to_buy:.{precision_value}f}"),
                 str(bid_price),
+            )["orderId"]
+            order = private_client.get_order_details(order_id)
+            print(
+                f'Order placed for {order["size"]} amount of {ticker} for {order["price"]}'
             )
             is_live = order["isActive"]
             new_buy_counter = 6
             while is_live:
-                order = private_client.get_order_details(order["orderId"])
+                order = private_client.get_order_details(order["id"])
                 is_live = order["isActive"]
+                print(f"Checking order status, is filled?: {not is_live}")
                 if new_buy_counter < 1:
-                    private_client.cancel_order(order["orderId"])
+                    private_client.cancel_order(order["id"])
                     print(f"canceled order with id {order['id']}")
                     bid_price = Decimal(public_client.get_ticker(ticker)["bestBid"])
-                    order = private_client.create_limit_order(
+                    order_id = private_client.create_limit_order(
                         ticker,
                         "buy",
                         str(f"{amount_to_buy:.{precision_value}f}"),
                         str(bid_price),
+                    )["orderId"]
+                    order = private_client.get_order_details(order_id)
+                    print(
+                        f'New order placed for {order["size"]} amount of {ticker} for {order["price"]}'
                     )
                     new_buy_counter = 6
                 time.sleep(10)
@@ -57,11 +66,15 @@ def run_trades(coin_list: list[Coin]):
                 crypto_to_crypto_bid_price,
             )["orderId"]
             order = private_client.get_order_details(order_id)
+            print(
+                f'Order placed for {order["size"]} amount of {ticker} for {order["price"]}'
+            )
             is_live = order["isActive"]
             new_buy_counter = 6
             while is_live:
                 order = private_client.get_order_details(order["id"])
                 is_live = order["isActive"]
+                print(f"Checking order status, is filled?: {not is_live}")
                 if new_buy_counter < 1:
                     private_client.cancel_order(order["id"])
                     print(f"canceled order with id {order['id']}")
@@ -82,6 +95,9 @@ def run_trades(coin_list: list[Coin]):
                         crypto_to_crypto_bid_price,
                     )["orderId"]
                     order = private_client.get_order_details(order_id)
+                    print(
+                        f'New order placed for {order["size"]} amount of {ticker} for {order["price"]}'
+                    )
                     new_buy_counter = 6
                 time.sleep(10)
                 new_buy_counter -= 1

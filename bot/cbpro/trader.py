@@ -25,11 +25,15 @@ def run_trades(coin_list: list[Coin]):
                 price=str(bid_price),
                 side="buy",
             )
+            print(
+                f'Order placed for {order["size"]} amount of {ticker} for {order["price"]}'
+            )
             settled = order["settled"]
             new_buy_counter = 6
             while not settled:
                 order = authenticated_client.get_order(order["id"])
                 settled = order["settled"]
+                print(f"Checking order status, is filled?: {settled}")
                 if new_buy_counter < 1:
                     authenticated_client.cancel_order(order["id"])
                     print(f"canceled order with id {order['id']}")
@@ -39,6 +43,9 @@ def run_trades(coin_list: list[Coin]):
                         size=str(f"{amount_to_buy:.{precision_value}f}"),
                         price=str(bid_price),
                         side="buy",
+                    )
+                    print(
+                        f'New order placed for {order["size"]} amount of {ticker} for {order["price"]}'
                     )
                     new_buy_counter = 6
 
@@ -57,11 +64,15 @@ def run_trades(coin_list: list[Coin]):
                 price=str(crypto_to_crypto_bid_price),
                 side="buy",
             )
+            print(
+                f'Order placed for {order["size"]} amount of {ticker} for {order["price"]}'
+            )
             settled = order["settled"]
             new_buy_counter = 6
             while not settled:
                 order = authenticated_client.get_order(order["id"])
                 settled = order["settled"]
+                print(f"Checking order status, is filled?: {settled}")
                 if new_buy_counter < 1:
                     authenticated_client.cancel_order(order["id"])
                     print(f"canceled order with id {order['id']}")
@@ -80,6 +91,9 @@ def run_trades(coin_list: list[Coin]):
                         size=str(f"{amount_to_buy:.{precision_value}f}"),
                         price=str(crypto_to_crypto_bid_price),
                         side="buy",
+                    )
+                    print(
+                        f'New order placed for {order["size"]} amount of {ticker} for {order["price"]}'
                     )
                     new_buy_counter = 6
                 time.sleep(10)

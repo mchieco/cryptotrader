@@ -22,11 +22,15 @@ def run_trades(coin_list: list[Coin]):
                 "buy",
                 [],
             )
+            print(
+                f'Order placed for {order["original_amount"]} amount of {ticker} for {order["price"]}'
+            )
             is_live = order["is_live"]
             new_buy_counter = 6
             while is_live:
                 order = private_client.status_of_order(order["order_id"])
                 is_live = order["is_live"]
+                print(f"Checking order status, is filled?: {not is_live}")
                 if new_buy_counter < 1:
                     private_client.cancel_order(order["order_id"])
                     print(f"canceled order with id {order['order_id']}")
@@ -38,8 +42,10 @@ def run_trades(coin_list: list[Coin]):
                         "buy",
                         [],
                     )
+                    print(
+                        f'New order placed for {order["original_amount"]} amount of {ticker} for {order["price"]}'
+                    )
                     new_buy_counter = 6
-
                 time.sleep(10)
                 new_buy_counter -= 1
         else:
@@ -54,11 +60,15 @@ def run_trades(coin_list: list[Coin]):
                 "buy",
                 [],
             )
+            print(
+                f'Order placed for {order["original_amount"]} amount of {ticker} for {order["price"]}'
+            )
             is_live = order["is_live"]
             new_buy_counter = 6
             while is_live:
                 order = private_client.status_of_order(order["order_id"])
                 is_live = order["is_live"]
+                print(f"Checking order status, is filled?: {not is_live}")
                 if new_buy_counter < 1:
                     private_client.cancel_order(order["order_id"])
                     print(f"canceled order with id {order['order_id']}")
@@ -74,6 +84,9 @@ def run_trades(coin_list: list[Coin]):
                         str(crypto_to_crypto_bid_price),
                         "buy",
                         [],
+                    )
+                    print(
+                        f'New order placed for {order["original_amount"]} amount of {ticker} for {order["price"]}'
                     )
                     new_buy_counter = 6
                 time.sleep(10)

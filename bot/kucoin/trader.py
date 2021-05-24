@@ -106,7 +106,7 @@ def run_trades(coin_list: list[Coin]):
 
 
 def _get_precision_value(public_client: Market, symbol: str) -> int:
-    tick_size = _get_symbol_details(public_client, symbol)["priceIncrement"]
+    tick_size = _get_symbol_details(public_client, symbol)["baseIncrement"]
     return len(tick_size.split(".")[1])
 
 

@@ -7,16 +7,17 @@ class Coin:
     buy_amount: Decimal
 
 gemini_portfolio = [
-    Coin("btcusd", 30), 
-    Coin("ethusd", 30), 
+    Coin("btcusd", 40), 
+    Coin("ethusd", 20),
     Coin("linkusd", 10)
 ]
 cbpro_portfolio = [
-    Coin("ALGO-USD", 10),
-    Coin("ATOM-USD", 10)
 ]
 kucoin_portfolio = [
-    Coin("VET-BTC", 10)
+    Coin("VET-BTC", 5),
+    Coin("ALGO-BTC", 5),
+    Coin("ATOM-BTC", 10),
+    Coin("ADA-BTC", 10),
 ]
 
 cbpro_auto_deposit_amount = 25.00

@@ -65,17 +65,22 @@ if __name__ == "__main__":
     if user_input == "schedule":
         while True:
             timeframe_input = input(
-                "Would you like to invest 'weekly', 'biweekly', or 'monthly'?: "
+                "Would you like to invest 'daily', 'weekly', 'biweekly', or 'monthly'?: "
             )
-            if timeframe_input in ["weekly", "biweekly", "monthly"]:
+            if timeframe_input in ["daily", "weekly", "biweekly", "monthly"]:
                 break
-
-        deposit_input = input(
-            f"Would you like to auto deposit {timeframe_input} at the same time for coinbase pro, yes or no?: "
-        )
-        schedule.every().sunday.at("13:00").do(
-            scheduled_trade, timeframe=timeframe_input, deposit=deposit_input
-        )
+        
+        if timeframe_input == "daily":
+            schedule.every().day.at("13:00").do(
+                run_portfolio_trade
+            )
+        else:
+            deposit_input = input(
+                f"Would you like to auto deposit {timeframe_input} at the same time for coinbase pro, yes or no?: "
+            )
+            schedule.every().sunday.at("13:00").do(
+                scheduled_trade, timeframe=timeframe_input, deposit=deposit_input
+            )
         print(f"Schedule job start, will DCA {timeframe_input}")
         while True:
             schedule.run_pending()

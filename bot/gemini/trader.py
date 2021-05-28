@@ -52,7 +52,7 @@ def run_trades(coin_list: list[Coin]):
             crypto_to_crypto_bid_price = public_client.get_ticker(ticker)["bid"]
             usd_price = public_client.get_ticker(f"{ticker[-3:]}usd")["price"]
             price_in_usd = Decimal(crypto_to_crypto_bid_price) * Decimal(usd_price)
-            amount_to_buy = Decimal(10) / price_in_usd
+            amount_to_buy = amount / price_in_usd
             order = private_client.new_order(
                 ticker,
                 str(f"{amount_to_buy:.{precision_value}f}"),
@@ -77,7 +77,7 @@ def run_trades(coin_list: list[Coin]):
                     price_in_usd = Decimal(crypto_to_crypto_bid_price) * Decimal(
                         usd_price
                     )
-                    amount_to_buy = Decimal(10) / price_in_usd
+                    amount_to_buy = amount / price_in_usd
                     order = private_client.new_order(
                         ticker,
                         str(f"{amount_to_buy:.{precision_value}f}"),

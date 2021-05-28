@@ -57,7 +57,7 @@ def run_trades(coin_list: list[Coin]):
                 "price"
             ]
             price_in_usd = Decimal(crypto_to_crypto_bid_price) * Decimal(usd_price)
-            amount_to_buy = Decimal(10) / price_in_usd
+            amount_to_buy = amount / price_in_usd
             order = authenticated_client.place_limit_order(
                 product_id=ticker,
                 size=str(f"{amount_to_buy:.{precision_value}f}"),
@@ -85,7 +85,7 @@ def run_trades(coin_list: list[Coin]):
                     price_in_usd = Decimal(crypto_to_crypto_bid_price) * Decimal(
                         usd_price
                     )
-                    amount_to_buy = Decimal(10) / price_in_usd
+                    amount_to_buy = amount / price_in_usd
                     order = authenticated_client.place_limit_order(
                         product_id=ticker,
                         size=str(f"{amount_to_buy:.{precision_value}f}"),

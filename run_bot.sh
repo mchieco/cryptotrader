@@ -1,3 +1,3 @@
 #!/bin/bash
-docker build -t crypto-trader .
-docker run -it --rm --name python-crypto-trader  crypto-trader
+docker build --no-cache -t crypto-trader .
+winpty docker run -it --rm --name python-crypto-trader  crypto-trader

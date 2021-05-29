@@ -49,9 +49,11 @@ To run the scheduled job, it requires the server/computer its running on to alwa
 Therefore, if you don't have a server or raspberry pi, the single time run will be the best option.
 
 In order to run the prgram run the following:
+
 ```bash
 python -m bot
 ```
+
 It will ask you what type of job you want to run, the keywords are ```schedule```, ```run```, or ```sell```  
 
 If you choose ```schedule``` it will ask you if you want ```monthly```, ```biweekly```, or ```weekly```; Select your prefered option.
@@ -69,7 +71,8 @@ This will contain all of your api keys, passphrases and secrets for all the plat
 The config file must follow the same structure as it relies on the names of the coniguration elements to run properly.
 Change the empty strings with your api secrets
 
-#### **`config.py`**
+### **`config.py`**
+
 ```python
 #for gemini
 gemini_api_key = ""
@@ -97,10 +100,10 @@ cbpro_auto_deposit_amount = 25.00
 
 You will also need to select yes when it asks you if you want to autodeposit on a scheduled job.
 
-
 By creating a coin in the portfolio following the structure below, it will place a limit buy at the highest current bid, and then wait until the order is filled to move on to the next order. If the order isn't filled within a minute, then it will cancel the order and create a new order at the current highest bid.
 
-#### **`dca_portfolio.py`**
+```dca_portfolio.py```
+
 ```python
 gemini_portfolio = [
     Coin("btcusd", 30), 
@@ -118,7 +121,8 @@ kucoin_portfolio = [
 So in this example, it will buy $30 in btc, $30 in eth, $10 in ALGO, $10 in ATOM, and $10 in VET.
 If you are not investing on one of the platforms simply remove all the Coin objects from the portfolio
 
-#### **`dca_portfolio.py`**
+```dca_portfolio.py```
+
 ```python
 gemini_portfolio = [ #not using gemini 
 ]
@@ -130,16 +134,21 @@ kucoin_portfolio = [ #using kucoin
     Coin("VET-BTC", 10)
 ]
 ```
+
 ## Changing the DCA time or day of the week
+
 The default DCA time for the scheduled job is sunday at 1:00 pm local time. This can be changed to your liking by editing a singular line of code in the ```__main__.py``` file in the ```bot``` folder.
 
-#### **`__main__.py`**
+```__main__.py```
+
 ```python
     schedule.every().sunday.at("13:00").do(scheduled_trade, timeframe=timeframe, deposit=deposit)
 ```
 
 For example, if you wanted thursday at 3am:
-#### **`__main__.py`**
+
+```__main__.py```
+
 ```python
     schedule.every().thursday.at("3:00").do(scheduled_trade, timeframe=timeframe, deposit=deposit)
 ```

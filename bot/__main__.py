@@ -1,10 +1,15 @@
 from datetime import datetime
 import time
 import schedule
+import sys
 from bot.cbpro import trader as cbpro_trader
 from bot.gemini import trader as gemini_trader
 from bot.kucoin import trader as kucoin_trader
 import dca_portfolio
+from multiprocessing import Process
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def scheduled_trade(timeframe: str, deposit: str):
@@ -27,11 +32,21 @@ def scheduled_trade(timeframe: str, deposit: str):
 
 def run_portfolio_trade():
     if dca_portfolio.cbpro_portfolio:
-        cbpro_trader.run_trades(dca_portfolio.cbpro_portfolio)
+        cb = Process(target=cbpro_trader.run_trades, args=(dca_portfolio.cbpro_portfolio, ))
+        cb.start()
     if dca_portfolio.kucoin_portfolio:
-        kucoin_trader.run_trades(dca_portfolio.kucoin_portfolio)
+        ku = Process(target=kucoin_trader.run_trades, args=(dca_portfolio.kucoin_portfolio, ))
+        ku.start()
     if dca_portfolio.gemini_portfolio:
-        gemini_trader.run_trades(dca_portfolio.gemini_portfolio)
+        gem = Process(target=gemini_trader.run_trades, args=(dca_portfolio.gemini_portfolio, ))
+        gem.start()
+
+    if dca_portfolio.cbpro_portfolio:
+        cb.join()
+    if dca_portfolio.kucoin_portfolio:
+        ku.join()
+    if dca_portfolio.gemini_portfolio:
+        gem.join()
 
 
 def auto_deposit(deposit_yes_or_no: str):
@@ -59,37 +74,40 @@ def sell_order():
 
 
 if __name__ == "__main__":
-    user_input = input(
-        "Please enter eitner 'schedule' to run a recurring job, 'run' to run a non-recurring job now or 'sell' to sell a position: "
-    )
-    if user_input == "schedule":
-        while True:
-            timeframe_input = input(
-                "Would you like to invest 'daily', 'weekly', 'biweekly', or 'monthly'?: "
-            )
-            if timeframe_input in ["daily", "weekly", "biweekly", "monthly"]:
-                break
-        
-        if timeframe_input == "daily":
-            schedule.every().day.at("13:00").do(
-                run_portfolio_trade
-            )
-        else:
-            deposit_input = input(
-                f"Would you like to auto deposit {timeframe_input} at the same time for coinbase pro, yes or no?: "
-            )
-            schedule.every().sunday.at("13:00").do(
-                scheduled_trade, timeframe=timeframe_input, deposit=deposit_input
-            )
-        print(f"Schedule job start, will DCA {timeframe_input}")
-        while True:
-            schedule.run_pending()
-            time.sleep(1)
-    elif user_input == "run":
+    if len(sys.argv) > 1 and sys.argv[1] == "no-user":
         run_portfolio_trade()
-    elif user_input == "sell":
-        sell_order()
     else:
-        print(
-            "Must provide an arguement value of either 'schedule' to schedule a recurring job, 'run' to run non-recurring job now or 'sell' to sell a position"
+        user_input = input(
+            "Please enter eitner 'schedule' to run a recurring job, 'run' to run a non-recurring job now or 'sell' to sell a position: "
         )
+        if user_input == "schedule":
+            while True:
+                timeframe_input = input(
+                    "Would you like to invest 'daily', 'weekly', 'biweekly', or 'monthly'?: "
+                )
+                if timeframe_input in ["daily", "weekly", "biweekly", "monthly"]:
+                    break
+            
+            if timeframe_input == "daily":
+                schedule.every().day.at("13:00").do(
+                    run_portfolio_trade
+                )
+            else:
+                deposit_input = input(
+                    f"Would you like to auto deposit {timeframe_input} at the same time for coinbase pro, yes or no?: "
+                )
+                schedule.every().sunday.at("13:00").do(
+                    scheduled_trade, timeframe=timeframe_input, deposit=deposit_input
+                )
+            print(f"Schedule job start, will DCA {timeframe_input}")
+            while True:
+                schedule.run_pending()
+                time.sleep(1)
+        elif user_input == "run":
+            run_portfolio_trade()
+        elif user_input == "sell":
+            sell_order()
+        else:
+            print(
+                "Must provide an arguement value of either 'schedule' to schedule a recurring job, 'run' to run non-recurring job now or 'sell' to sell a position"
+            )

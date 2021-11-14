@@ -2,7 +2,13 @@
 
 Crypto Trader is a Python library for Dollar Cost Averaging Crypto, with some other API driven abilties as well.
 
-## Installation
+## Docker Installation (Recommended)
+
+Docker is the recommended way to get this program up and running fast, without having to setup your own personal environment.
+
+You can run the Dockerfile either with the ```no-user``` flag or run it without the flag to look for user input.
+
+## Development Installation
 
 Clone the git repository.
 
@@ -63,28 +69,34 @@ The default invest time is sunday at 1pm local. This can be changed, and is expl
 You can also use the program to do singular sells through the API. This can save on transaction fees if they are lower on the API than on the platform, ex. Gemini.
 The sell command will ask you questions about what you want to sell, so follow the promopts and it will fill out a sell limit order based on the inputs.
 
+You can also choose to run it via command line commands to run automatically and not require user input.
+
+```bash
+python -m bot no-user
+```
+
 ## Configuration
 
-The program requires you to create a ```config.py``` file in the root directory.
+The program requires you to have environment variables or to create a ```.env``` file in the root directory.
 This will contain all of your api keys, passphrases and secrets for all the platforms.
 
-The config file must follow the same structure as it relies on the names of the coniguration elements to run properly.
-Change the empty strings with your api secrets
+The env file must follow the same structure as it relies on the names of the coniguration elements to run properly.
+Add your api secrets to the env file with the below syntax.
 
-### **`config.py`**
+### **`.env`**
 
-```python
+```bash
 #for gemini
-gemini_api_key = ""
-gemini_api_secret = ""
+gemini_api_key= 
+gemini_api_secret= 
 #for coinbase pro
-coinbase_pro_api_key = ""
-coinbase_pro_api_passphrase = ""
-coinbase_pro_api_secret = ""
+coinbase_pro_api_key=
+coinbase_pro_api_passphrase=
+coinbase_pro_api_secret=
 #for kucoin
-kucoin_api_key = ""
-kucoin_api_passphrase = ""
-kucoin_api_secret = ""
+kucoin_api_key=
+kucoin_api_passphrase=
+kucoin_api_secret=
 ```
 
 ## Portfolio

@@ -35,11 +35,12 @@ def run(coin: Coin):
             f'Order placed for {order["size"]} amount of {ticker} for {order["price"]}'
         )
         settled = order["settled"]
-        new_buy_counter = 6
+        new_buy_counter = 20
         while not settled:
+            time.sleep(5)
             order = authenticated_client.get_order(order["id"])
             settled = order["settled"]
-            print(f"Checking order status, is filled?: {settled}")
+            print(f"Checking order status for {ticker}, is filled?: {settled}")
             if new_buy_counter < 1:
                 authenticated_client.cancel_order(order["id"])
                 print(f"canceled order with id {order['id']}")
@@ -53,9 +54,7 @@ def run(coin: Coin):
                 print(
                     f'New order placed for {order["size"]} amount of {ticker} for {order["price"]}'
                 )
-                new_buy_counter = 6
-
-            time.sleep(10)
+                new_buy_counter = 20
             new_buy_counter -= 1
     else:
         crypto_to_crypto_bid_price = public_client.get_product_ticker(ticker)["bid"]
@@ -74,12 +73,12 @@ def run(coin: Coin):
             f'Order placed for {order["size"]} amount of {ticker} for {order["price"]}'
         )
         settled = order["settled"]
-        new_buy_counter = 6
+        new_buy_counter = 20
         while not settled:
-            time.sleep(10)
+            time.sleep(5)
             order = authenticated_client.get_order(order["id"])
             settled = order["settled"]
-            print(f"Checking order status, is filled?: {settled}")
+            print(f"Checking order status for {ticker}, is filled?: {settled}")
             if new_buy_counter < 1:
                 authenticated_client.cancel_order(order["id"])
                 print(f"canceled order with id {order['id']}")
@@ -102,7 +101,7 @@ def run(coin: Coin):
                 print(
                     f'New order placed for {order["size"]} amount of {ticker} for {order["price"]}'
                 )
-                new_buy_counter = 6
+                new_buy_counter = 20
             new_buy_counter -= 1
 
     print(f'Bought {order["size"]} amount of {ticker} for {order["price"]}')

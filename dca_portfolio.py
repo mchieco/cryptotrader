@@ -7,8 +7,9 @@ class Coin:
     buy_amount: Decimal
 
 gemini_portfolio = [
-    Coin("btcusd", 30),
+    Coin("btcusd", 20),
     Coin("ethusd", 30),
+    Coin("maticusd", 10),
     Coin("linkusd", 20)
 ]
 cbpro_portfolio = [

@@ -75,6 +75,12 @@ You can also choose to run it via command line commands to run automatically and
 python -m bot no-user
 ```
 
+You can also add the auto deposit flag for coinbase pro.
+
+```bash
+python -m bot no-user autodeposit
+```
+
 ## Configuration
 
 The program requires you to have environment variables or to create a ```.env``` file in the root directory.

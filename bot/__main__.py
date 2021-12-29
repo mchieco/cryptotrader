@@ -75,6 +75,8 @@ def sell_order():
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "no-user":
+        if len(sys.argv) > 2 and sys.argv[2] == "autodeposit":
+            auto_deposit("yes")
         run_portfolio_trade()
     else:
         user_input = input(

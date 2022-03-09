@@ -14,7 +14,8 @@ gemini_portfolio = [
 cbpro_portfolio = [
     Coin("DOT-USD", 20),
     Coin("ATOM-USD", 20),
-    Coin("ALGO-USD", 10),
+    Coin("ALGO-USD", 5),
+    Coin("ADA-USD", 5),
 ]
 kucoin_portfolio = [
 ]

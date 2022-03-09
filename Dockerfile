@@ -13,4 +13,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD [ "python", "-m", "bot", "no-user"]
+CMD [ "python", "-m", "bot", "no-user", "autodeposit"]
